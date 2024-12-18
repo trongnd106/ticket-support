@@ -23,7 +23,13 @@ class Ticket extends Model
         'status'
     ];
 
-    public function users(){
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function assignee()
+    {
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
