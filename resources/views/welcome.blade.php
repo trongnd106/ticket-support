@@ -58,7 +58,7 @@
                         @endif
                     </header>
 
-                    <main class="mt-6">
+                    <!-- <main class="mt-6">
                         <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
                             <a
                                 href="https://laravel.com/docs"
@@ -164,10 +164,127 @@
                                 </div>
                             </div>
                         </div>
+                    </main> -->
+
+                    <main class="mt-6">
+                        <section class="container mx-auto p-6 bg-white rounded-lg shadow-md">
+                            <h1 class="text-3xl font-semibold text-gray-900 mb-4">Welcome to the Ticket Support Management System</h1>
+                            <p class="text-lg text-gray-700 mb-6">
+                            This platform is designed to help businesses efficiently manage customer support requests. Whether you're an admin or support agent, this system enables you to create, view, and resolve support tickets seamlessly.
+                            </p>
+                            <p class="text-lg text-gray-700 mb-6">
+                            The Ticket Support Management System simplifies the process of managing tickets and ensures smooth communication between customers and support teams. With a user-friendly interface and a range of features, this system is ideal for improving response times and tracking the resolution of customer issues.
+                            </p>
+                            <p class="text-lg text-gray-700 mb-6">
+                            Key Features:
+                            </p>
+                            <ul class="list-disc pl-6 text-gray-700 mb-6">
+                            <li class="mb-2">Create and assign new support tickets</li>
+                            <li class="mb-2 pl-8">Easily generate tickets based on customer issues and assign them to the appropriate agent.</li>
+                            <li class="mb-2">Track ticket status in real-time</li>
+                            <li class="mb-2 pl-8">Monitor the progress of each ticket, from creation to resolution, ensuring all tickets are handled promptly.</li>
+                            <li class="mb-2">View ticket details and histories</li>
+                            <li class="mb-2 pl-8">Access detailed information about tickets, including the full history of customer inquiries and support responses.</li>
+                            <li class="mb-2">Respond to customer inquiries promptly</li>
+                            <li class="mb-2 pl-8">Respond to customer issues in a timely manner, improving customer satisfaction and reducing ticket resolution times.</li>
+                            <li class="mb-2">Manage ticket priorities and resolutions</li>
+                            <li class="mb-2 pl-8">Prioritize tickets based on urgency and ensure that critical issues are resolved first.</li>
+                            </ul>
+                            <p class="text-lg text-gray-700 mb-6">
+                            This platform also provides detailed analytics and reports, allowing admins to track performance metrics and ensure that the support team is functioning efficiently. You can review key performance indicators (KPIs) such as response time, ticket resolution time, and agent performance.
+                            </p>
+                            <p class="text-lg text-red-500 font-bold mb-6">
+                            Start managing your support tickets today to ensure timely and effective resolution of customer issues!
+                            </p>
+                            <p class="text-lg text-gray-700 mb-6">
+                            With the Ticket Support Management System, you can streamline the process, reduce response times, and deliver exceptional customer service. Sign in to your account or contact the admin if you need assistance with setting up or using the system.
+                            </p>
+                            <p class="text-lg text-gray-700">
+                            Explore the dashboard to get started, or contact your admin if you need assistance.
+                            </p>
+                        </section>
                     </main>
 
+                    <style>
+                        .mt-6 {
+                            margin-top: 1.5rem;
+                        }
+
+                        .container {
+                            max-width: 1200px;
+                            margin: 0 auto;
+                            padding: 20px;
+                        }
+
+                        .text-gray-900 {
+                            color: #1a202c; 
+                        }
+
+                        .text-gray-700 {
+                            color: #4a5568; 
+                        }
+
+                        .text-red-500 {
+                            color: #f56565; 
+                        }
+
+                        .font-semibold {
+                            font-weight: 600;
+                        }
+
+                        .font-bold {
+                            font-weight: 700;
+                        }
+
+                        .bg-white {
+                            background-color: #ffffff;
+                        }
+
+                        .rounded-lg {
+                            border-radius: 8px;
+                        }
+
+                        .shadow-md {
+                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                        }
+
+                        .p-6 {
+                            padding: 1.5rem;
+                        }
+
+                        .mb-4 {
+                            margin-bottom: 1rem;
+                        }
+
+                        .mb-6 {
+                            margin-bottom: 1.5rem;
+                        }
+
+                        .text-lg {
+                            font-size: 1.125rem;
+                        }
+
+                        .text-3xl {
+                            font-size: 1.875rem;
+                        }
+
+                        .list-disc {
+                            list-style-type: disc;
+                        }
+
+                        .pl-6 {
+                            padding-left: 1.5rem;
+                        }
+
+                        .pl-8 {
+                            padding-left: 2rem;
+                        }
+                    </style>
+
+
+
                     <footer class="py-16 text-center text-sm text-black dark:text-white/70">
-                        Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
+                        Ticket Support System -v{{ Illuminate\Foundation\Application::VERSION }}
                     </footer>
                 </div>
             </div>

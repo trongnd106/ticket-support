@@ -16,8 +16,9 @@ return new class extends Migration
             $table->string('title');
             $table->text('description'); 
             $table->enum('priority', ['low', 'medium', 'high'])->default('low'); 
-            $table->enum('status', ['pending', 'progress', 'resolved'])->default('pending');
+            $table->enum('status', ['pending', 'processing', 'resolved'])->default('pending');
             $table->boolean('is_locked')->default(0); 
+            $table->foreignId('user_id')->nullable()->constrained('users');
             $table->foreignId('assigned_to')->nullable()
                 ->constrained('users')->onDelete('cascade');
             $table->timestamps();
