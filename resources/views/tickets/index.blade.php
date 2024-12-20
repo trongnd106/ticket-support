@@ -8,22 +8,22 @@
             {{ __('Create') }}
         </a>
         <div class="flex space-x-2 pt-4">
-            <select class="px-2 block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="status" id="status" onchange="changeFilter('status', this)">
-                <option>-- SELECT STATUS --</option>
+            <select class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="status" id="status" onchange="changeFilter('status', this)">
+                <option>STATUS</option>
                 <option @selected(request('status') === 'pending') value="pending">Pending</option>
                 <option @selected(request('status') === 'processing') value="processing">Processing</option>
                 <option @selected(request('status') === 'resolved') value="resolved">Resolved</option>
             </select>
 
             <select class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="priority" id="priority" onchange="changeFilter('priority', this)">
-                <option>-- SELECT PRIORITY --</option>
+                <option>PRIORITY</option>
                 <option @selected(request('priority') === 'low') value="low">Low</option>
                 <option @selected(request('priority') === 'medium') value="medium">Medium</option>
                 <option @selected(request('priority') === 'high') value="high">High</option>
             </select>
 
             <select class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="category" id="category" onchange="changeFilter('category', this)">
-                <option>-- SELECT CATEGORY --</option>
+                <option>CATEGORY</option>
                 @foreach(\App\Models\Category::pluck('name', 'id') as $id => $name)
                     <option @selected($id == request('category'))>{{ $name }}</option>
                 @endforeach
