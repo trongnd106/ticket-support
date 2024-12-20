@@ -31,6 +31,7 @@
         </div>
 
         <div class="flex items-center rounded-lg bg-white shadow-xs">
+            @role('user')
             <a href="{{ route('tickets.index', ['status' => 'open']) }}" class="block flex w-full p-4">
                 <div class="mr-4 h-full rounded-full bg-green-100 p-3 text-green-500">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
@@ -46,9 +47,28 @@
                     </p>
                 </div>
             </a>
+            @endrole
+            @role('admin')
+            <a href="{{ route('agents.index') }}" class="block flex w-full p-4">
+                <div class="mr-4 h-full rounded-full bg-green-100 p-3 text-green-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 14.25c0-1.66-1.34-3-3-3s-3 1.34-3 3 1.34 3 3 3 3-1.34 3-3zm-5.25 0c0-1.66-1.34-3-3-3s-3 1.34-3 3 1.34 3 3 3 3-1.34 3-3zm-10.5 0c0-1.66-1.34-3-3-3s-3 1.34-3 3 1.34 3 3 3 3-1.34 3-3zm2.5 2.25c0 1.38 1.12 2.5 2.5 2.5h10c1.38 0 2.5-1.12 2.5-2.5v-6.75c0-1.38-1.12-2.5-2.5-2.5h-10c-1.38 0-2.5 1.12-2.5 2.5v6.75z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="mb-2 text-sm font-medium text-gray-600">
+                        Total agents
+                    </p>
+                    <p class="text-lg font-semibold text-gray-700">
+                        {{ $agents }}
+                    </p>
+                </div>
+            </a>
+            @endrole    
         </div>
 
         <div class="flex items-center rounded-lg bg-white shadow-xs">
+            @role('user')
             <a href="{{ route('tickets.index', ['status' => 'closed']) }}" class="block flex w-full p-4">
                 <div class="mr-4 h-full rounded-full bg-blue-100 p-3 text-blue-500">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
@@ -64,6 +84,24 @@
                     </p>
                 </div>
             </a>
+            @endrole
+            @role('admin')
+            <a href="{{ route('tickets.index', ['status' => 'closed']) }}" class="block flex w-full p-4">
+                <div class="mr-4 h-full rounded-full bg-blue-100 p-3 text-blue-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="mb-2 text-sm font-medium text-gray-600">
+                        Total users
+                    </p>
+                    <p class="text-lg font-semibold text-gray-700">
+                        0
+                    </p>
+                </div>
+            </a>
+            @endrole('admin')
         </div>
     </div>
 </x-app-layout>
