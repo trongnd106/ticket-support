@@ -48,7 +48,12 @@
                             @endhasanyrole
                             
                             <th class="px-6 py-4 text-center border border-gray-300">
+                            @role('user')
+                            Assigned to
+                            @endrole 
+                            @role('admin')
                             Action
+                            @endrole
                             </th>
                         </tr>
                     </thead>
@@ -79,7 +84,7 @@
                                 </td>
                                 @hasanyrole('admin|agent')
                                     <td class="px-4 py-2 text-sm text-center border border-gray-300">
-                                        {{ $ticket->assignedToUser?->name ?? '' }}
+                                        {{ $ticket->assignee?->name ?? '' }}
                                     </td>
                                 @endhasanyrole
                                 <td class="px-4 py-2 space-x-2 text-center border border-gray-300">
@@ -90,6 +95,12 @@
                                     @endhasanyrole
 
                                     @role('admin')
+                                        <a href="{{ route('tickets.edit', $ticket) }}">
+                                            @csrf 
+                                            <x-primary-button>
+                                                Edit
+                                            </x-primary-button>
+                                        </a>
                                         <form action="{{ route('tickets.destroy', $ticket) }}" method="POST" onsubmit="return confirm('Are you sure?')" style="display: inline-block;">
                                             @csrf
                                             @method('DELETE')
@@ -100,12 +111,7 @@
                                     @endrole
 
                                     @role('user')
-                                        <a href="{{ route('tickets.edit', $ticket) }}">
-                                        @csrf 
-                                        <x-primary-button>
-                                            Edit
-                                        </x-primary-button>
-                                        </a>
+                                        {{ $ticket->assignee?->name ?? '' }}
                                     @endrole
                                 </td>
                             </tr>
