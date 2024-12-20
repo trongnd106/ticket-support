@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        {{ __('Tickets') }}
+        {{ __('All tickets') }}
     </x-slot>
 
     <div class="mb-4 flex justify-between">
@@ -46,10 +46,14 @@
                             @hasanyrole('admin|agent')
                                 <th class="px-6 py-4 text-center border border-gray-300">Assigned to</th>
                             @endhasanyrole
+                            
                             <th class="px-6 py-4 text-center border border-gray-300">
-                                @hasrole('user')
+                            @role('user')
                                 Note
-                                @endhasrole('user')
+                            @endrole('user')
+                            @role('admin')
+                                Action
+                            @endrole('admin')
                             </th>
                         </tr>
                     </thead>
@@ -59,31 +63,31 @@
                                 <td class="px-6 py-4 text-sm text-center border border-gray-300">
                                     <a href="{{ route('tickets.show', $ticket) }}" class="hover:underline">{{ $ticket->title }}</a>
                                 </td>
-                                <td class="px-6 py-4 text-sm text-center border border-gray-300">
+                                <td class="px-4 py-2 text-sm text-center border border-gray-300">
                                     {{ $ticket->creator?->name }}
                                 </td>
-                                <td class="px-6 py-4 text-sm text-center border border-gray-300">
+                                <td class="px-4 py-2 text-sm text-center border border-gray-300">
                                     {{ $ticket->status }}
                                 </td>
-                                <td class="px-6 py-4 text-sm text-center border border-gray-300">
+                                <td class="px-4 py-2 text-sm text-center border border-gray-300">
                                     {{ $ticket->priority }}
                                 </td>
-                                <td class="px-6 py-4 text-sm text-center border border-gray-300">
+                                <td class="px-4 py-2 text-sm text-center border border-gray-300">
                                     @foreach($ticket->categories as $category)
                                         <span class="rounded-full bg-gray-50 px-2 py-2">{{ $category->name }}</span>
                                     @endforeach
                                 </td>
-                                <td class="px-6 py-4 text-sm text-center border border-gray-300">
+                                <td class="px-4 py-2 text-sm text-center border border-gray-300">
                                     @foreach($ticket->labels as $label)
                                         <span class="rounded-full bg-gray-50 px-2 py-2">{{ $label->name }}</span>
                                     @endforeach
                                 </td>
                                 @hasanyrole('admin|agent')
-                                    <td class="px-6 py-4 text-sm text-center border border-gray-300">
+                                    <td class="px-4 py-2 text-sm text-center border border-gray-300">
                                         {{ $ticket->assignedToUser?->name ?? '' }}
                                     </td>
                                 @endhasanyrole
-                                <td class="px-6 py-4 space-x-2 text-center border border-gray-300">
+                                <td class="px-4 py-2 space-x-2 text-center border border-gray-300">
                                     @hasanyrole('admin|agent')
                                         <a class="rounded-lg border-2 border-transparent bg-purple-600 px-4 py-2 text-center text-sm font-medium leading-5 text-white transition-colors duration-150 hover:bg-purple-700 focus:outline-none focus:ring active:bg-purple-600" href="{{ route('tickets.edit', $ticket) }}">
                                             {{ __('Edit') }}

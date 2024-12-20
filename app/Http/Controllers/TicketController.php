@@ -16,8 +16,10 @@ class TicketController extends Controller
     // {
     //     $this->middleware('auth');
     // }
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $user = Auth::user();
+        
         $tickets = Ticket::with('creator', 'categories', 'labels', 'assignee')
             ->when($request->has('status'), function (Builder $query) use ($request) {
                 return $query->where('status', $request->input('status'));
@@ -28,17 +30,21 @@ class TicketController extends Controller
             ->when($request->has('category'), function (Builder $query) use ($request) {
                 return $query->whereRelation('categories', 'id', $request->input('category'));
             })
-            ->when($user->role == 'agent', function (Builder $query) {
-                $query->where('assigned_to', Auth::user()->id);
+            // ->when($user->hasRole('agent'), function (Builder $query) {
+            //     return $query->where('assigned_to', $user->id);
+            // })
+            ->when($user->hasRole('user'), function (Builder $query) use ($user) {
+                return $query->where('user_id', $user->id);
             })
-            ->when($user->role == 'user', callback: function (Builder $query) {
-                $query->where('user_id', Auth::user()->id);
+            ->when($user->hasRole('admin'), function (Builder $query) {
+                return $query; 
             })
             ->latest()
             ->paginate();
-
+    
         return view('tickets.index', compact('tickets'));
     }
+    
 
     public function create(){
         $labels = Label::pluck('name', 'id');
