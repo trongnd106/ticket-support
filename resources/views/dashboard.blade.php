@@ -5,14 +5,13 @@
 
     @hasrole('user')
     <div class="mb-6 flex justify-center">
-        <a href="{{ route('tickets.create') }}" class="px-6 py-3 text-black bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 rounded-lg shadow-md transform transition duration-200 ease-in-out hover:scale-105">
+        <a href="{{ route('tickets.create') }}" class="mt-6 px-4 py-4 text-lg font-semibold text-black bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 rounded-lg shadow-md transform transition duration-200 ease-in-out hover:scale-105">
             Create new ticket
         </a>
     </div>
     @endhasrole('user')
     
-    <div class="mb-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        <!-- Total Tickets Card -->
+    <div class="px-6 mb-8 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         <div class="flex items-center rounded-lg bg-white shadow-xs">
             <a href="{{ route('tickets.index') }}" class="block flex w-full p-4">
                 <div class="mr-4 h-full rounded-full bg-orange-100 p-3 text-orange-500">
@@ -33,7 +32,6 @@
             </a>
         </div>
 
-        <!-- Opened Tickets Card -->
         <div class="flex items-center rounded-lg bg-white shadow-xs">
             <a href="{{ route('tickets.index', ['status' => 'open']) }}" class="block flex w-full p-4">
                 <div class="mr-4 h-full rounded-full bg-green-100 p-3 text-green-500">
@@ -46,13 +44,12 @@
                         Open tickets
                     </p>
                     <p class="text-lg font-semibold text-gray-700">
-                        1
+                        0
                     </p>
                 </div>
             </a>
         </div>
 
-        <!-- Closed Tickets Card -->
         <div class="flex items-center rounded-lg bg-white shadow-xs">
             <a href="{{ route('tickets.index', ['status' => 'closed']) }}" class="block flex w-full p-4">
                 <div class="mr-4 h-full rounded-full bg-blue-100 p-3 text-blue-500">
@@ -65,10 +62,11 @@
                         Closed tickets
                     </p>
                     <p class="text-lg font-semibold text-gray-700">
-                        1
+                        0
                     </p>
                 </div>
             </a>
         </div>
+    </div>
 </x-app-layout>
 

@@ -7,16 +7,14 @@
         <a class="rounded-lg border border-transparent bg-purple-600 px-4 py-2 text-center text-sm font-medium leading-5 text-white transition-colors duration-150 hover:bg-purple-700 focus:outline-none focus:ring active:bg-purple-600" href="{{ route('tickets.create') }}">
             {{ __('Create') }}
         </a>
-        <div class="flex space-x-2">
-            <!-- Status Filter -->
-            <select class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="status" id="status" onchange="changeFilter('status', this)">
+        <div class="flex space-x-2 pt-4">
+            <select class="px-2 block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="status" id="status" onchange="changeFilter('status', this)">
                 <option>-- SELECT STATUS --</option>
                 <option @selected(request('status') === 'pending') value="pending">Pending</option>
                 <option @selected(request('status') === 'processing') value="processing">Processing</option>
                 <option @selected(request('status') === 'resolved') value="resolved">Resolved</option>
             </select>
 
-            <!-- Priority Filter -->
             <select class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="priority" id="priority" onchange="changeFilter('priority', this)">
                 <option>-- SELECT PRIORITY --</option>
                 <option @selected(request('priority') === 'low') value="low">Low</option>
@@ -24,7 +22,6 @@
                 <option @selected(request('priority') === 'high') value="high">High</option>
             </select>
 
-            <!-- Category Filter -->
             <select class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="category" id="category" onchange="changeFilter('category', this)">
                 <option>-- SELECT CATEGORY --</option>
                 @foreach(\App\Models\Category::pluck('name', 'id') as $id => $name)
@@ -37,52 +34,56 @@
     <div class="rounded-lg bg-white p-4 shadow-xs">
         <div class="mb-8 w-full overflow-hidden rounded-lg border shadow-xs">
             <div class="w-full overflow-x-auto">
-                <table class="w-full whitespace-no-wrap">
+                <table class="w-full table-auto border-collapse border border-gray-300">
                     <thead>
                         <tr class="border-b bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
-                            <th class="px-4 py-3">Title</th>
-                            <th class="px-4 py-3">Author</th>
-                            <th class="px-4 py-3">Status</th>
-                            <th class="px-4 py-3">Priority</th>
-                            <th class="px-4 py-3">Categories</th>
-                            <th class="px-4 py-3">Labels</th>
+                            <th class="px-6 py-4 text-center border border-gray-300">Title</th>
+                            <th class="px-6 py-4 text-center border border-gray-300">Author</th>
+                            <th class="px-6 py-4 text-center border border-gray-300">Status</th>
+                            <th class="px-6 py-4 text-center border border-gray-300">Priority</th>
+                            <th class="px-6 py-4 text-center border border-gray-300">Categories</th>
+                            <th class="px-6 py-4 text-center border border-gray-300">Labels</th>
                             @hasanyrole('admin|agent')
-                                <th class="px-4 py-3">Assigned to</th>
+                                <th class="px-6 py-4 text-center border border-gray-300">Assigned to</th>
                             @endhasanyrole
-                            <th></th>
+                            <th class="px-6 py-4 text-center border border-gray-300">
+                                @hasrole('user')
+                                Note
+                                @endhasrole('user')
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y">
                         @forelse($tickets as $ticket)
                             <tr class="text-gray-700">
-                                <td class="px-4 py-3 text-sm">
+                                <td class="px-6 py-4 text-sm text-center border border-gray-300">
                                     <a href="{{ route('tickets.show', $ticket) }}" class="hover:underline">{{ $ticket->title }}</a>
                                 </td>
-                                <td class="px-4 py-3 text-sm">
+                                <td class="px-6 py-4 text-sm text-center border border-gray-300">
                                     {{ $ticket->creator?->name }}
                                 </td>
-                                <td class="px-4 py-3 text-sm">
+                                <td class="px-6 py-4 text-sm text-center border border-gray-300">
                                     {{ $ticket->status }}
                                 </td>
-                                <td class="px-4 py-3 text-sm">
+                                <td class="px-6 py-4 text-sm text-center border border-gray-300">
                                     {{ $ticket->priority }}
                                 </td>
-                                <td class="px-4 py-3 text-sm">
+                                <td class="px-6 py-4 text-sm text-center border border-gray-300">
                                     @foreach($ticket->categories as $category)
                                         <span class="rounded-full bg-gray-50 px-2 py-2">{{ $category->name }}</span>
                                     @endforeach
                                 </td>
-                                <td class="px-4 py-3 text-sm">
+                                <td class="px-6 py-4 text-sm text-center border border-gray-300">
                                     @foreach($ticket->labels as $label)
                                         <span class="rounded-full bg-gray-50 px-2 py-2">{{ $label->name }}</span>
                                     @endforeach
                                 </td>
                                 @hasanyrole('admin|agent')
-                                    <td class="px-4 py-3 text-sm">
+                                    <td class="px-6 py-4 text-sm text-center border border-gray-300">
                                         {{ $ticket->assignedToUser?->name ?? '' }}
                                     </td>
                                 @endhasanyrole
-                                <td class="px-4 py-3 space-x-2">
+                                <td class="px-6 py-4 space-x-2 text-center border border-gray-300">
                                     @hasanyrole('admin|agent')
                                         <a class="rounded-lg border-2 border-transparent bg-purple-600 px-4 py-2 text-center text-sm font-medium leading-5 text-white transition-colors duration-150 hover:bg-purple-700 focus:outline-none focus:ring active:bg-purple-600" href="{{ route('tickets.edit', $ticket) }}">
                                             {{ __('Edit') }}
@@ -102,7 +103,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td class="px-4 py-3" colspan="4">No tickets found.</td>
+                                <td class="px-6 py-4 text-center" colspan="7">No tickets found.</td>
                             </tr>
                         @endforelse
                     </tbody>
