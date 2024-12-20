@@ -23,7 +23,11 @@ class AgentController extends Controller
     
         $agentsWithTicketCount = $agents->map(function ($agent) {
             $ticketCount = Ticket::where('assigned_to', $agent->id)->count();
+            $unresolved = Ticket::where('assigned_to', $agent->id)
+                    ->where('status', '!=', 'resolved')
+                    ->count();
             $agent->ticket_count = $ticketCount;
+            $agent->unresolved_count = $unresolved;
             return $agent;
         });
     
