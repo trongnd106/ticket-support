@@ -27,6 +27,7 @@
                             <th class="px-6 py-4 text-center border border-gray-300">Email</th>
                             <th class="px-6 py-4 text-center border border-gray-300">Phone</th>
                             <th class="px-6 py-4 text-center border border-gray-300">Total tickets</th>
+                            <th class="px-6 py-4 text-center border border-gray-300">Un-resolved</th>
                             <th class="px-6 py-4 text-center border border-gray-300">Status</th>
                         </tr>
                     </thead>
@@ -47,6 +48,9 @@
                                 </td>
                                 <td class="px-4 py-2 text-sm text-center border border-gray-300">
                                     {{ $agent->ticket_count }}
+                                </td>
+                                <td class="px-4 py-2 text-sm text-center border border-gray-300">
+                                    {{ $agent->unresolved_count }}
                                 </td>
                                 <td class="px-4 py-2 text-sm text-center border border-gray-300">
                                     {{ $agent->status }}
