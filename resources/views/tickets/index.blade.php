@@ -48,12 +48,7 @@
                             @endhasanyrole
                             
                             <th class="px-6 py-4 text-center border border-gray-300">
-                            @role('user')
-                                Note
-                            @endrole('user')
-                            @role('admin')
-                                Action
-                            @endrole('admin')
+                            Action
                             </th>
                         </tr>
                     </thead>
@@ -102,6 +97,15 @@
                                                 Delete
                                             </x-primary-button>
                                         </form>
+                                    @endrole
+
+                                    @role('user')
+                                        <a href="{{ route('tickets.edit', $ticket) }}">
+                                        @csrf 
+                                        <x-primary-button>
+                                            Edit
+                                        </x-primary-button>
+                                        </a>
                                     @endrole
                                 </td>
                             </tr>
