@@ -8,31 +8,33 @@
             {{ __('Create') }}
         </a>
         <div class="flex space-x-2">
-            <select class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="status" id="status" onChange="window.location.href=this.value">
+            <!-- Status Filter -->
+            <select class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="status" id="status" onchange="changeFilter('status', this)">
                 <option>-- SELECT STATUS --</option>
-                @foreach(\Coderflex\LaravelTicket\Enums\Status::cases() as $status)
-                    <option @selected($status->value == request('status'))>{{ $status->name }}</option>
-                @endforeach
+                <option @selected(request('status') === 'pending') value="pending">Pending</option>
+                <option @selected(request('status') === 'processing') value="processing">Processing</option>
+                <option @selected(request('status') === 'resolved') value="resolved">Resolved</option>
             </select>
 
-            <select class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="priority" id="priority" onchange="window.location.href=this.value">
+            <!-- Priority Filter -->
+            <select class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="priority" id="priority" onchange="changeFilter('priority', this)">
                 <option>-- SELECT PRIORITY --</option>
-                @foreach(\Coderflex\LaravelTicket\Enums\Priority::cases() as $priority)
-                    <option @selected($priority->value == request('priority'))>{{ $priority->name }}</option>
-                @endforeach
+                <option @selected(request('priority') === 'low') value="low">Low</option>
+                <option @selected(request('priority') === 'medium') value="medium">Medium</option>
+                <option @selected(request('priority') === 'high') value="high">High</option>
             </select>
 
-            <select class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="category" id="category" onchange="window.location.href=this.value">
+            <!-- Category Filter -->
+            <select class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="category" id="category" onchange="changeFilter('category', this)">
                 <option>-- SELECT CATEGORY --</option>
-                    @foreach(\App\Models\Category::pluck('name', 'id') as $id => $name)
-                        <option @selected($id == request('category'))>{{ $name }}</option>
-                    @endforeach
+                @foreach(\App\Models\Category::pluck('name', 'id') as $id => $name)
+                    <option @selected($id == request('category'))>{{ $name }}</option>
+                @endforeach
             </select>
         </div>
     </div>
 
     <div class="rounded-lg bg-white p-4 shadow-xs">
-
         <div class="mb-8 w-full overflow-hidden rounded-lg border shadow-xs">
             <div class="w-full overflow-x-auto">
                 <table class="w-full whitespace-no-wrap">
@@ -57,7 +59,7 @@
                                     <a href="{{ route('tickets.show', $ticket) }}" class="hover:underline">{{ $ticket->title }}</a>
                                 </td>
                                 <td class="px-4 py-3 text-sm">
-                                    {{ $ticket->user->name }}
+                                    {{ $ticket->creator?->name }}
                                 </td>
                                 <td class="px-4 py-3 text-sm">
                                     {{ $ticket->status }}
@@ -77,7 +79,7 @@
                                 </td>
                                 @hasanyrole('admin|agent')
                                     <td class="px-4 py-3 text-sm">
-                                        {{ $ticket->assignedToUser->name ?? '' }}
+                                        {{ $ticket->assignedToUser?->name ?? '' }}
                                     </td>
                                 @endhasanyrole
                                 <td class="px-4 py-3 space-x-2">
@@ -113,6 +115,18 @@
                 </div>
             @endif
         </div>
-
     </div>
+
+    <script>
+        function changeFilter(filter, select) {
+            const value = select.value;
+            const url = new URL(window.location);
+            if (value) {
+                url.searchParams.set(filter, value); 
+            } else {
+                url.searchParams.delete(filter); 
+            }
+            window.location.href = url.toString(); 
+        }
+    </script>
 </x-app-layout>

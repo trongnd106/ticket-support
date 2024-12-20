@@ -12,9 +12,13 @@ use App\Http\Requests\TicketCreateRequest;
 
 class TicketController extends Controller
 {
+    // public function __construct()
+    // {
+    //     $this->middleware('auth');
+    // }
     public function index(Request $request){
         $user = Auth::user();
-        $tickets = Ticket::with('user', 'categories', 'labels', 'assignedToUser')
+        $tickets = Ticket::with('creator', 'categories', 'labels', 'assignee')
             ->when($request->has('status'), function (Builder $query) use ($request) {
                 return $query->where('status', $request->input('status'));
             })
@@ -45,6 +49,7 @@ class TicketController extends Controller
     public function store(TicketCreateRequest $request)
     {
         $user = Auth::user(); 
+        
         $ticket = Ticket::create([
             'title' => $request->title,
             'description' => $request->description,

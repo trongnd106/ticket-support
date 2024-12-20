@@ -20,7 +20,8 @@ class Ticket extends Model
         'title',
         'description',
         'priority',
-        'status'
+        'status',
+        'user_id'
     ];
 
     public function creator()
