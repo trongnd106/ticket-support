@@ -13,6 +13,7 @@
         "coderflex/laravel-ticket": "^2.0",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
+        "spatie/laravel-medialibrary": "^11.11",
         "spatie/laravel-permission": "^6.10"
     },
     "require-dev": {

@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MessageController;
 
 
 Route::get('/', function () {
@@ -20,6 +21,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('tickets', TicketController::class);
     Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
+
+    Route::post('/message/{ticket}', [MessageController::class,'store'])->name('message.store');
 });
 
 require __DIR__.'/auth.php';
