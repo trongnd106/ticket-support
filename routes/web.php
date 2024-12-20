@@ -25,7 +25,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/message/{ticket}', [MessageController::class,'store'])->name('message.store');
 
-    Route::get('/agents', [AgentController::class,'index'])->name('agents.index');
+    Route::resource('/agents', AgentController::class);
+    Route::get('/agents/create', [AgentController::class,'create'])->name('agents.create');
 });
 
 require __DIR__.'/auth.php';
