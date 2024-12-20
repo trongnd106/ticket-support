@@ -24,7 +24,8 @@ class Ticket extends Model implements HasMedia
         'description',
         'priority',
         'status',
-        'user_id'
+        'user_id',
+        'assigned_to'
     ];
 
     public function creator()

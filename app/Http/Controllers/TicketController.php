@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TicketCreateRequest;
+use App\Http\Requests\TicketUpdateRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Notifications\AssignedTicketNotification;
 
 class TicketController extends Controller
 {
@@ -72,33 +75,41 @@ class TicketController extends Controller
         return redirect()->route('tickets.index');
     }
 
-    // todo: update with policies
     public function show($id)
     {
         $ticket = Ticket::findOrFail($id);
         return view('tickets.show', compact('ticket'));
     }
 
-    // todo: update with policies
     public function edit($id)
     {
+        $users = User::role('agent')->orderBy('name')->pluck('name','id');
         $ticket = Ticket::findOrFail($id);
-        return view('tickets.edit', compact('ticket'));
+        $labels = Label::pluck('name', 'id');
+        $categories = Category::pluck('name', 'id');
+        return view('tickets.edit', compact('ticket','labels','categories','users'));
     }
 
-    // todo: update
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'title' => 'required|string',
-            'description' => 'required|string',
-        ]);
+    public function update(TicketUpdateRequest $request, Ticket $ticket)
+    {   
+        $ticket->update($request->only('title', 'message', 'status', 'priority', 'assigned_to'));
 
-        $ticket = Ticket::findOrFail($id);
-        $ticket->update($request->all());
+        $ticket->categories()->sync($request->input('categories'));
+        $ticket->labels()->sync($request->input('labels'));
 
-        return redirect()->route('tickets.index');
+        if ($ticket->wasChanged('assigned_to')) {
+            User::find($request->input('assigned_to'))->notify(new AssignedTicketNotification($ticket));
+        }
+
+        if (!is_null($request->input('attachments')[0])) {
+            foreach ($request->input('attachments') as $file) {
+                $ticket->addMediaFromDisk($file, 'public')->toMediaCollection('tickets_attachments');
+            }
+        }
+
+        return to_route('tickets.index');
     }
+
 
     // todo: update 
     public function destroy($id)
