@@ -35,6 +35,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/labels', LabelController::class);
     Route::resource('/categories', CategoryController::class);
+
+    Route::get('/tickets-agents',[TicketController::class, 'agent'])->name(name: 'tickets.agent');
 });
 
 require __DIR__.'/auth.php';

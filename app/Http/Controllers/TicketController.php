@@ -50,7 +50,37 @@ class TicketController extends Controller
             ->paginate(10);
         
         return view('tickets.index', compact('tickets'));
-    }    
+    }
+
+    public function agent(Request $request)
+    {
+        $user = Auth::user();
+        
+        $tickets = Ticket::with('creator', 'categories', 'labels', 'assignee')
+            ->when($request->has('status'), function (Builder $query) use ($request) {
+                return $query->where('status', $request->input('status'));
+            })
+            ->when($request->has('priority'), function (Builder $query) use ($request) {
+                return $query->where('priority', $request->input('priority'));
+            })
+            ->when($request->has('category'), function (Builder $query) use ($request) {
+                return $query->whereHas('categories', function ($query) use ($request) {
+                    $query->where('categories.name', $request->input('category'));
+                });
+            })
+            ->when($request->has('label'), function (Builder $query) use ($request) {
+                return $query->whereHas('labels', function ($query) use ($request) {
+                    $query->where('labels.name', $request->input('label'));
+                });
+            })
+            ->when($user->hasRole('agent'), function (Builder $query) use ($user) {
+                return $query->where('assigned_to', $user->id);
+            })      
+            ->latest()
+            ->paginate(10);
+        
+        return view('tickets.agent', compact('tickets'));
+    }
    
     public function create(){
         $labels = Label::pluck('name', 'id');
