@@ -86,10 +86,10 @@
             </a>
             @endrole
             @role('admin')
-            <a href="{{ route('tickets.index', ['status' => 'closed']) }}" class="block flex w-full p-4">
+            <a href="{{ route('users.index')}}" class="block flex w-full p-4">
                 <div class="mr-4 h-full rounded-full bg-blue-100 p-3 text-blue-500">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 8.25A3.75 3.75 0 1112 4.5a3.75 3.75 0 013.75 3.75zm-1.5 7.5h-6c-3 0-5.25 2.25-5.25 5.25v1.5h16.5v-1.5c0-3-2.25-5.25-5.25-5.25z" />
                     </svg>
                 </div>
                 <div>
@@ -97,7 +97,7 @@
                         Total users
                     </p>
                     <p class="text-lg font-semibold text-gray-700">
-                        0
+                        {{ $users }}
                     </p>
                 </div>
             </a>
