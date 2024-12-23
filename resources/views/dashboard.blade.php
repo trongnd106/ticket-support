@@ -103,6 +103,24 @@
             </a>
             @endrole('admin')
         </div>
+        <div class="flex items-center rounded-lg bg-white shadow-xs">
+            @role('admin')
+            <a href="{{ route('labels.index') }}" class="block flex w-full p-4">
+                <div class="mr-4 h-full rounded-full bg-purple-100 p-3 text-purple-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-6 w-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75h4.5v4.5h-4.5zM7.5 3h9a1.5 1.5 0 011.5 1.5v15a1.5 1.5 0 01-1.5 1.5h-9A1.5 1.5 0 016 19.5v-15A1.5 1.5 0 017.5 3z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="mb-2 text-sm font-medium text-gray-600">
+                        Total labels
+                    </p>
+                    <p class="text-lg font-semibold text-gray-700">
+                        {{ $labels }}
+                    </p>
+                </div>
+            </a>
+            @endrole
+        </div>
     </div>
 </x-app-layout>
-

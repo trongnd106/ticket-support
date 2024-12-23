@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\Ticket;
 use App\Models\User;
+use App\Models\Label;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller {
@@ -20,7 +21,8 @@ class DashboardController extends Controller {
         }
         $agents = User::role('agent')->count();
         $users = User::role('user')->count();
+        $labels = Label::count();
 
-        return view('dashboard', compact('totalTickets', 'agents', 'users'));
+        return view('dashboard', compact('totalTickets', 'agents', 'users','labels'));
     }
 }
