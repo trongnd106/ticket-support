@@ -25,7 +25,14 @@
             <select class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="category" id="category" onchange="changeFilter('category', this)">
                 <option>CATEGORY</option>
                 @foreach(\App\Models\Category::pluck('name', 'id') as $id => $name)
-                    <option @selected($id == request('category'))>{{ $name }}</option>
+                    <option value="{{ $name }}" @selected($name == request('category'))>{{ $name }}</option>
+                @endforeach
+            </select>
+
+            <select class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="label" id="label" onchange="changeFilter('label', this)">
+                <option>LABEL</option>
+                @foreach(\App\Models\Label::pluck('name', 'id') as $id => $name)
+                    <option value="{{ $name }}" @selected($name == request('label'))>{{ $name }}</option>
                 @endforeach
             </select>
         </div>

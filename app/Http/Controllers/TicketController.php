@@ -28,27 +28,30 @@ class TicketController extends Controller
                 return $query->where('status', $request->input('status'));
             })
             ->when($request->has('priority'), function (Builder $query) use ($request) {
-                return $query->withPriority($request->input('priority'));
+                return $query->where('priority', $request->input('priority'));
             })
             ->when($request->has('category'), function (Builder $query) use ($request) {
-                return $query->whereRelation('categories', 'id', $request->input('category'));
+                return $query->whereHas('categories', function ($query) use ($request) {
+                    $query->where('categories.name', $request->input('category'));
+                });
             })
-            // ->when($user->hasRole('agent'), function (Builder $query) {
-            //     return $query->where('assigned_to', $user->id);
-            // })
+            ->when($request->has('label'), function (Builder $query) use ($request) {
+                return $query->whereHas('labels', function ($query) use ($request) {
+                    $query->where('labels.name', $request->input('label'));
+                });
+            })
             ->when($user->hasRole('user'), function (Builder $query) use ($user) {
                 return $query->where('user_id', $user->id);
-            })
+            })  
             ->when($user->hasRole('admin'), function (Builder $query) {
-                return $query; 
+                return $query;
             })
             ->latest()
             ->paginate();
-    
+        
         return view('tickets.index', compact('tickets'));
-    }
-    
-
+    }    
+   
     public function create(){
         $labels = Label::pluck('name', 'id');
         $categories = Category::pluck('name', 'id');
