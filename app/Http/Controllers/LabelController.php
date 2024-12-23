@@ -13,12 +13,6 @@ class LabelController extends Controller
 
         return view('labels.index', compact('labels'));
     }
-
-    public function create()
-    {
-        return view('labels.create');
-    }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -31,11 +25,6 @@ class LabelController extends Controller
     
         return redirect(route('labels.index'))->with('success', 'Label created successfully.');
     }
-    public function edit(Label $label)
-    {
-        return view('labels.edit', compact('label'));
-    }
-
     public function update(Request $request, Label $label)
     {
         $request->validate([

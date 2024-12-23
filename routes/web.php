@@ -33,8 +33,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
-    Route::resource('/labels', LabelController::class);
-    Route::resource('/categories', CategoryController::class);
+    Route::get('/labels', [LabelController::class, 'index'])->name('labels.index');;
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');;
 });
 
 require __DIR__.'/auth.php';
