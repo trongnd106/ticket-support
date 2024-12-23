@@ -17,7 +17,7 @@ class DashboardController extends Controller {
         
         if ($user->hasRole('user')) {
             $totalTickets = Ticket::where('user_id', $user->id)->count();
-        } else if($user->hasRole('admin')){
+        } else if($user->hasRole('admin|agent')){
             $totalTickets = Ticket::count();
         }
         $agents = User::role('agent')->count();
