@@ -7,6 +7,7 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AgentController;
+use App\Http\Controllers\UserController;
 
 
 Route::get('/', function () {
@@ -27,6 +28,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/agents', AgentController::class);
     Route::get('/agents/create', [AgentController::class,'create'])->name('agents.create');
+
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
 });
 
 require __DIR__.'/auth.php';

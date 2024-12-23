@@ -19,7 +19,8 @@ class DashboardController extends Controller {
             $totalTickets = Ticket::count();
         }
         $agents = User::role('agent')->count();
+        $users = User::role('user')->count();
 
-        return view('dashboard', compact('totalTickets', 'agents'));
+        return view('dashboard', compact('totalTickets', 'agents', 'users'));
     }
 }
