@@ -47,7 +47,7 @@ class TicketController extends Controller
                 return $query;
             })
             ->latest()
-            ->paginate();
+            ->paginate(10);
         
         return view('tickets.index', compact('tickets'));
     }    
