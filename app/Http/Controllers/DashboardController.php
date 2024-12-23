@@ -19,12 +19,13 @@ class DashboardController extends Controller {
             $totalTickets = Ticket::where('user_id', $user->id)->count();
         } else if($user->hasRole('admin|agent')){
             $totalTickets = Ticket::count();
+            $myTickets = Ticket::where('assigned_to', $user->id)->count();
         }
         $agents = User::role('agent')->count();
         $users = User::role('user')->count();
         $labels = Label::count();
         $categories = Category::count();
 
-        return view('dashboard', compact('totalTickets', 'agents', 'users','labels','categories'));
+        return view('dashboard', compact('totalTickets', 'agents', 'users','labels','categories','myTickets'));
     }
 }
