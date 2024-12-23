@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\Label;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller {
@@ -22,7 +23,8 @@ class DashboardController extends Controller {
         $agents = User::role('agent')->count();
         $users = User::role('user')->count();
         $labels = Label::count();
+        $categories = Category::count();
 
-        return view('dashboard', compact('totalTickets', 'agents', 'users','labels'));
+        return view('dashboard', compact('totalTickets', 'agents', 'users','labels','categories'));
     }
 }
