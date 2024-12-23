@@ -133,15 +133,17 @@
     </div>
 
     <script>
-        function changeFilter(filter, select) {
-            const value = select.value;
-            const url = new URL(window.location);
-            if (value) {
-                url.searchParams.set(filter, value); 
-            } else {
-                url.searchParams.delete(filter); 
-            }
-            window.location.href = url.toString(); 
+    function changeFilter(filter, select) {
+        const value = select.value;
+        const urlParams = new URLSearchParams(window.location.search);
+
+        if (value === filter.toUpperCase()) {
+            urlParams.delete(filter);
+        } else {
+            urlParams.set(filter, value); 
         }
+
+        window.location.search = urlParams.toString();
+    }
     </script>
 </x-app-layout>
