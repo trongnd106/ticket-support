@@ -9,6 +9,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LabelController;
+use App\Http\Controllers\CategoryController;
 
 
 Route::get('/', function () {
@@ -33,7 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
 
     Route::resource('/labels', LabelController::class);
-    Route::get('/labels/create', [LabelController::class, 'create'])->name('labels.create');
+    Route::resource('/categories', CategoryController::class);
 });
 
 require __DIR__.'/auth.php';
