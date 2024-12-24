@@ -17,8 +17,20 @@ class UserController extends Controller
     }
     public function index(Request $request)
     {
-        $usersWithTicketCount = $this->userService->getUsersWithTicketCounts();
+        $users = User::role('user');
+    
+        $users = $users->paginate(10);
+    
+        $usersWithTicketCount = $users->map(function ($user) {
+            $ticketCount = Ticket::where('user_id', $user->id)->count();
+            $unresolved = Ticket::where('user_id', $user->id)
+                    ->where('status', '!=', 'resolved')
+                    ->count();
+            $user->ticket_count = $ticketCount;
+            $user->unresolved_count = $unresolved;
+            return $user;
+        });
 
-        return view('users.index', compact('usersWithTicketCount'));
+        return view('users.index', compact('usersWithTicketCount', 'users'));
     }
 }

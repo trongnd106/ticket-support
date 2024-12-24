@@ -18,6 +18,7 @@ class UserService {
         return $users->map(function ($user) {
             $ticketCount = Ticket::where('user_id', $user->id)->count();
             $unresolved = Ticket::where('user_id', $user->id)
+                ->where('status', '!=', 'resolved')
                 ->count();
 
             $user->ticket_count = $ticketCount;
