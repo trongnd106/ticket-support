@@ -50,6 +50,45 @@
                         </form>
                     </x-slot>
                 </x-dropdown>
+                <div x-data="{ showNotifications: false }" class="relative me-4">
+                    <!-- Notification Button -->
+                    <button 
+                        @click="showNotifications = !showNotifications" 
+                        class="relative inline-flex items-center px-3 py-2 rounded-full text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.118V11a6.002 6.002 0 00-5-5.917V4a2 2 0 10-4 0v1.083A6.002 6.002 0 004 11v3.118c0 .512-.195 1.02-.595 1.477L2 17h5m10 0a3 3 0 11-6 0m6 0H9" />
+                        </svg>
+                        <!-- Notification Badge -->
+                        @if($notifications->count() > 0)
+                        <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">
+                            {{ $notifications->count() }}
+                        </span>
+                        @endif
+                    </button>
+
+                    <!-- Notification Dropdown -->
+                    <div 
+                        x-show="showNotifications" 
+                        @click.outside="showNotifications = false" 
+                        class="absolute right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50" 
+                        style="width: 400px; min-width: 300px; max-width: 800px; right: 10px;">
+                        <div class="px-4 py-2 font-medium text-gray-700 border-b">
+                            Notifications
+                        </div>
+                        @forelse($notifications as $notification)
+                            <div class="p-4 text-sm text-gray-500 text-center">
+                                {{ $notification->data['message'] }} with id {{ $notification->data['ticket_id'] }}
+                            </div>
+                        @empty
+                            <div class="p-4 text-sm text-gray-500 text-center">
+                                No notifications found.
+                            </div>
+                        @endforelse
+                        <div class="p-4 text-sm text-gray-500 text-center">
+                            <a href="{{ route('notifications.index') }}" class="text-blue-500 hover:underline">View all notifications</a>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Hamburger -->
