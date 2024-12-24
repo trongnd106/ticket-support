@@ -19,7 +19,7 @@ class AgentController extends Controller
             $agents->where('status', $request->status);
         }
     
-        $agents = $agents->get();
+        $agents = $agents->paginate(10);
     
         $agentsWithTicketCount = $agents->map(function ($agent) {
             $ticketCount = Ticket::where('assigned_to', $agent->id)->count();
@@ -31,7 +31,7 @@ class AgentController extends Controller
             return $agent;
         });
     
-        return view('agents.index', compact('agentsWithTicketCount'));
+        return view('agents.index', compact('agentsWithTicketCount', 'agents'));
     }
     
     public function create(){
