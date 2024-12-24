@@ -46,6 +46,10 @@
         </div>
     </div>
 
+    <div class="mt-4">
+        {{ $users->links() }}
+    </div>
+
     <script>
         function changeFilter(filter, select) {
             const value = select.value;
