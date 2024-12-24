@@ -14,6 +14,7 @@ class DashboardController extends Controller {
         // dd($user);
 
         $totalTickets = 0;
+        $myTickets = 0;
         
         if ($user->hasRole('user')) {
             $totalTickets = Ticket::where('user_id', $user->id)->count();

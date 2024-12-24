@@ -11,7 +11,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\TicketCreateRequest;
 use App\Http\Requests\TicketUpdateRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Notifications\AssignedTicketNotification;
+use App\Notifications\TicketCreatedNotification;
+use App\Notifications\TicketAssignedNotification;
+use App\Notifications\TicketStatusUpdatedNotification;
 
 class TicketController extends Controller
 {
@@ -105,6 +107,11 @@ class TicketController extends Controller
         if ($request->has('labels')) {
             $ticket->labels()->sync($request->input('labels'));
         }
+        // Send notification to Admin
+        $admins = User::role('admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new TicketCreatedNotification($ticket));
+        }
         return redirect()->route('tickets.index');
     }
 
@@ -125,13 +132,21 @@ class TicketController extends Controller
 
     public function update(TicketUpdateRequest $request, Ticket $ticket)
     {   
+        $originalStatus = $ticket->status;
+        $originalAgent = $ticket->assigned_to;  
         $ticket->update($request->only('title', 'message', 'status', 'priority', 'assigned_to'));
+
+        if ($originalStatus !== $ticket->status) {
+            $user = User::findOrFail($ticket->user_id);
+            $user->notify(new TicketStatusUpdatedNotification($ticket));
+        }
 
         $ticket->categories()->sync($request->input('categories'));
         $ticket->labels()->sync($request->input('labels'));
 
-        if ($ticket->wasChanged('assigned_to')) {
-            User::find($request->input('assigned_to'))->notify(new AssignedTicketNotification($ticket));
+        if($originalAgent !== $ticket->assigned_to){
+            $user = User::findOrFail($ticket->assigned_to);
+            $user->notify(new TicketAssignedNotification($ticket));
         }
 
         if (!is_null($request->input('attachments')[0])) {

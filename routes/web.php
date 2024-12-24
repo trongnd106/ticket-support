@@ -10,6 +10,7 @@ use App\Http\Controllers\AgentController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\NotificationController;
 
 
 Route::get('/', function () {
@@ -37,6 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/categories', CategoryController::class);
 
     Route::get('/tickets-agents',[TicketController::class, 'agent'])->name(name: 'tickets.agent');
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 });
 
 require __DIR__.'/auth.php';
