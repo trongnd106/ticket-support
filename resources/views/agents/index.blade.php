@@ -67,7 +67,6 @@
         </div>
     </div>
 
-    <!-- Hiển thị phân trang -->
     <div class="mt-4">
         {{ $agents->links() }}
     </div>
