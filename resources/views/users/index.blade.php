@@ -14,6 +14,9 @@
                             <th class="px-6 py-4 text-center border border-gray-300">Email</th>
                             <th class="px-6 py-4 text-center border border-gray-300">Total tickets</th>
                             <th class="px-6 py-4 text-center border border-gray-300">Un-resolved</th>
+                            @role('admin')
+                            <th class="px-6 py-4 text-center border border-gray-300">Action</th>
+                            @endrole
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y">
@@ -34,6 +37,17 @@
                                 <td class="px-4 py-2 text-sm text-center border border-gray-300">
                                     {{ $user->unresolved_count }}
                                 </td>
+                                @role('admin')
+                                <td class="px-4 py-2 text-sm text-center border border-gray-300">
+                                    <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Are you sure?')" style="display: inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <x-primary-button>
+                                            Delete
+                                        </x-primary-button>
+                                    </form>
+                                </td>
+                                @endrole
                             </tr>
                         @empty
                             <tr>

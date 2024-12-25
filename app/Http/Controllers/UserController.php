@@ -33,4 +33,9 @@ class UserController extends Controller
 
         return view('users.index', compact('usersWithTicketCount', 'users'));
     }
+
+    public function destroy($id){
+        $user = User::find($id)->delete();
+        return redirect(route('users.index'));
+    }
 }
