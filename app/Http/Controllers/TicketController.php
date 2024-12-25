@@ -14,73 +14,25 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Notifications\TicketCreatedNotification;
 use App\Notifications\TicketAssignedNotification;
 use App\Notifications\TicketStatusUpdatedNotification;
+use App\Services\TicketService;
 
 class TicketController extends Controller
 {
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    protected $ticketService;
+
+    public function __construct(TicketService $ticketService)
+    {
+        $this->ticketService = $ticketService;
+    }
     public function index(Request $request)
     {
-        $user = Auth::user();
-        
-        $tickets = Ticket::with('creator', 'categories', 'labels', 'assignee')
-            ->when($request->has('status'), function (Builder $query) use ($request) {
-                return $query->where('status', $request->input('status'));
-            })
-            ->when($request->has('priority'), function (Builder $query) use ($request) {
-                return $query->where('priority', $request->input('priority'));
-            })
-            ->when($request->has('category'), function (Builder $query) use ($request) {
-                return $query->whereHas('categories', function ($query) use ($request) {
-                    $query->where('categories.name', $request->input('category'));
-                });
-            })
-            ->when($request->has('label'), function (Builder $query) use ($request) {
-                return $query->whereHas('labels', function ($query) use ($request) {
-                    $query->where('labels.name', $request->input('label'));
-                });
-            })
-            ->when($user->hasRole('user'), function (Builder $query) use ($user) {
-                return $query->where('user_id', $user->id);
-            })  
-            ->when($user->hasRole('admin'), function (Builder $query) {
-                return $query;
-            })
-            ->latest()
-            ->paginate(10);
-        
+        $tickets = $this->ticketService->getAllTickets($request);
         return view('tickets.index', compact('tickets'));
     }
 
     public function agent(Request $request)
     {
-        $user = Auth::user();
-        
-        $tickets = Ticket::with('creator', 'categories', 'labels', 'assignee')
-            ->when($request->has('status'), function (Builder $query) use ($request) {
-                return $query->where('status', $request->input('status'));
-            })
-            ->when($request->has('priority'), function (Builder $query) use ($request) {
-                return $query->where('priority', $request->input('priority'));
-            })
-            ->when($request->has('category'), function (Builder $query) use ($request) {
-                return $query->whereHas('categories', function ($query) use ($request) {
-                    $query->where('categories.name', $request->input('category'));
-                });
-            })
-            ->when($request->has('label'), function (Builder $query) use ($request) {
-                return $query->whereHas('labels', function ($query) use ($request) {
-                    $query->where('labels.name', $request->input('label'));
-                });
-            })
-            ->when($user->hasRole('agent'), function (Builder $query) use ($user) {
-                return $query->where('assigned_to', $user->id);
-            })      
-            ->latest()
-            ->paginate(10);
-        
+        $tickets = $this->ticketService->getAgentTickets($request);
         return view('tickets.agent', compact('tickets'));
     }
    
@@ -92,32 +44,13 @@ class TicketController extends Controller
     }
     public function store(TicketCreateRequest $request)
     {
-        $user = Auth::user(); 
-        
-        $ticket = Ticket::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'priority' => $request->priority,
-            'status' => 'pending',
-            'user_id' => $user->id,
-        ]);
-        if ($request->has('categories')) {
-            $ticket->categories()->sync($request->input('categories'));
-        }
-        if ($request->has('labels')) {
-            $ticket->labels()->sync($request->input('labels'));
-        }
-        // Send notification to Admin
-        $admins = User::role('admin')->get();
-        foreach ($admins as $admin) {
-            $admin->notify(new TicketCreatedNotification($ticket));
-        }
+        $this->ticketService->create($request);
         return redirect()->route('tickets.index');
     }
 
     public function show($id)
     {
-        $ticket = Ticket::findOrFail($id);
+        $ticket = $this->ticketService->getDetail($id);
         return view('tickets.show', compact('ticket'));
     }
 
@@ -132,39 +65,13 @@ class TicketController extends Controller
 
     public function update(TicketUpdateRequest $request, Ticket $ticket)
     {   
-        $originalStatus = $ticket->status;
-        $originalAgent = $ticket->assigned_to;  
-        $ticket->update($request->only('title', 'message', 'status', 'priority', 'assigned_to'));
-
-        if ($originalStatus !== $ticket->status) {
-            $user = User::findOrFail($ticket->user_id);
-            $user->notify(new TicketStatusUpdatedNotification($ticket));
-        }
-
-        $ticket->categories()->sync($request->input('categories'));
-        $ticket->labels()->sync($request->input('labels'));
-
-        if($originalAgent !== $ticket->assigned_to){
-            $user = User::findOrFail($ticket->assigned_to);
-            $user->notify(new TicketAssignedNotification($ticket));
-        }
-
-        if (!is_null($request->input('attachments')[0])) {
-            foreach ($request->input('attachments') as $file) {
-                $ticket->addMediaFromDisk($file, 'public')->toMediaCollection('tickets_attachments');
-            }
-        }
-
+        $this->ticketService->update($request, $ticket);
         return to_route('tickets.index');
     }
 
-
-    // todo: update 
     public function destroy($id)
     {
-        $ticket = Ticket::findOrFail($id);
-        $ticket->delete();
-
+        $this->ticketService->delete($id);
         return redirect()->route('tickets.index');
     }
 }
