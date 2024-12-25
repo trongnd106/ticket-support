@@ -4,21 +4,21 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class AgentMiddleware
+class AdminAgentMiddleware
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
-        if (!Auth::user()->hasRole('agent')) {
-            abort(404); 
+        if(Auth::user()->hasRole('admin') || Auth::user()->hasRole('agent')){
+            return $next($request);
         }
-
-        return $next($request);
+        abort(404, 'Unauthorized'); 
     }
 }

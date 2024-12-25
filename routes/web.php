@@ -28,16 +28,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/tickets/create', [TicketController::class, 'create'])->name('tickets.create');
     Route::post('/message/{ticket}', [MessageController::class, 'store'])->name('message.store');
 
-    Route::middleware('admin')->group(function () {
-        Route::resource('/agents', AgentController::class);
+    Route::middleware(\App\Http\Middleware\AdminAgentMiddleware::class)->group(function(){
+        Route::get('/agents', [AgentController::class, 'index'])->name('agents.index');
+    });
+
+    Route::middleware(\App\Http\Middleware\AdminMiddleware::class)->group(function () {
+        // Route::resource('/agents', AgentController::class);
+        Route::post('/agents', [AgentController::class,'store'])->name('agents.store');
         Route::get('/agents/create', [AgentController::class, 'create'])->name('agents.create');
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
         Route::resource('/labels', LabelController::class);
         Route::resource('/categories', CategoryController::class);
     });
 
-    Route::middleware('agent')->group(function () {
-        Route::get('/agents', [AgentController::class, 'index'])->name('agents.index');
+    Route::middleware(\App\Http\Middleware\AgentMiddleware::class)->group(function () {
+        // Route::get('/agents', [AgentController::class, 'index'])->name('agents.index');
         Route::get('/tickets-agents', [TicketController::class, 'agent'])->name('tickets.agent');
     });
     
