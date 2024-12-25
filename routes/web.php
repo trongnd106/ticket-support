@@ -35,6 +35,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware(\App\Http\Middleware\AdminMiddleware::class)->group(function () {
         // Route::resource('/agents', AgentController::class);
         Route::post('/agents', [AgentController::class,'store'])->name('agents.store');
+        Route::delete('/agents/{agent}', [AgentController::class,'destroy'])->name('agents.destroy');
         Route::get('/agents/create', [AgentController::class, 'create'])->name('agents.create');
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
         Route::resource('/labels', LabelController::class);
