@@ -58,9 +58,9 @@
             <div class="mt-4">
                 <x-input-label for="priority" :value="__('Priority')" />
                 <select name="priority" id="priority" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50">
-                    <option value="low" @selected(old('priority') == 'low')>{{ __('Low') }}</option>
-                    <option value="medium" @selected(old('priority') == 'medium')>{{ __('Medium') }}</option>
-                    <option value="high" @selected(old('priority') == 'high')>{{ __('High') }}</option>
+                    <option value="low" @selected(old('priority', $ticket->priority) == 'low')>{{ __('Low') }}</option>
+                    <option value="medium" @selected(old('priority', $ticket->priority) == 'medium')>{{ __('Medium') }}</option>
+                    <option value="high" @selected(old('priority', $ticket->priority) == 'high')>{{ __('High') }}</option>
                 </select>
                 <x-input-error :messages="$errors->get('priority')" class="mt-2" />
             </div>
@@ -68,9 +68,9 @@
             <div class="mt-4">
                 <x-input-label for="status" :value="__('Status')" />
                 <select name="status" id="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50">
-                    <option value="pending" @selected(old('status') == 'pending')>{{ __('Pending') }}</option>
-                    <option value="processing" @selected(old('status') == 'processing')>{{ __('Processing') }}</option>
-                    <option value="resolved" @selected(old('status') == 'resolved')>{{ __('Resolved') }}</option>
+                    <option value="pending" @selected(old('status', $ticket->status) == 'pending')>{{ __('Pending') }}</option>
+                    <option value="processing" @selected(old('status', $ticket->status) == 'processing')>{{ __('Processing') }}</option>
+                    <option value="resolved" @selected(old('status', $ticket->status) == 'resolved')>{{ __('Resolved') }}</option>
                 </select>
                 <x-input-error :messages="$errors->get('status')" class="mt-2" />
             </div>
