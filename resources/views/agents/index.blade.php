@@ -7,6 +7,13 @@
         <a class="my-2 rounded-lg border-2 border-solid border-gray-400 bg-purple-600 px-4 py-2 text-center text-lg font-medium leading-5 text-black transition-colors duration-150 hover:bg-purple-700 focus:outline-none focus:ring active:bg-purple-600" href="{{ route('agents.create') }}">
             {{ __('New agent') }}
         </a>
+        
+        <div class="mb-4 pt-4">
+            <form action="{{ route('agents.index') }}" method="GET" class="flex items-center">
+                <input type="text" name="search" value="{{ request('search') }}" placeholder="Search by agent name" class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50 px-4 py-2" />
+                <button type="submit" class="ml-2 bg-purple-600 text-grey px-4 py-2 rounded-md hover:bg-purple-700 focus:outline-none">Search</button>
+            </form>
+        </div>
         <div class="flex space-x-2 pt-4">
             <select style="margin-left: 8px;" class="block w-full rounded-md border-gray-300 shadow-sm focus-within:text-primary-600 focus:border-primary-300 focus:ring-primary-200 focus:ring focus:ring-opacity-50" name="status" id="status" onchange="changeFilter('status', this)">
                 <option>STATUS</option>

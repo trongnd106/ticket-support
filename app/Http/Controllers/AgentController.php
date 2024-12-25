@@ -15,9 +15,13 @@ class AgentController extends Controller
     public function index(Request $request)
     {
         $agents = User::role('agent');
-    
+        
         if ($request->has('status') && in_array($request->status, ['busy', 'free'])) {
             $agents->where('status', $request->status);
+        }
+    
+        if ($request->has('search') && !empty($request->search)) {
+            $agents->where('name', 'like', '%' . $request->search . '%');
         }
     
         $agents = $agents->paginate(10);
@@ -31,9 +35,10 @@ class AgentController extends Controller
             $agent->unresolved_count = $unresolved;
             return $agent;
         });
-    
+        
         return view('agents.index', compact('agentsWithTicketCount', 'agents'));
     }
+    
     
     public function create(){
         return view('agents.create');
