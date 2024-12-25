@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Ticket;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
 
 class AgentController extends Controller
 {
@@ -55,5 +56,10 @@ class AgentController extends Controller
 
     public function update(){
         // todo: when tickets have't resolved reach to 5, change to busy
+    }
+
+    public function destroy($id){
+        $agent = User::find($id)->delete();
+        return redirect(route('agents.index'));
     }
 }
