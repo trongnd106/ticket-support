@@ -4,8 +4,8 @@
     </x-slot>
 
     <div class="flex justify-center mt-8">
-        <div class="container max-w-2xl">
-            <div class="w-full max-w-lg rounded-lg bg-white p-6 mt-6 shadow-md">
+        <div class="container max-w-2xl" style="min-width: 36rem;">
+            <div class="w-full max-w-lg rounded-lg bg-whitreme p-6 mt-6 shadow-md">
                 <form action="{{ route('agents.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div>
