@@ -9,6 +9,7 @@ use App\Notifications\TicketCreatedNotification;
 use App\Notifications\TicketAssignedNotification;
 use App\Notifications\TicketStatusUpdatedNotification;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\DB;
 
 class TicketService {
     public function getAllTickets($request){
@@ -102,28 +103,41 @@ class TicketService {
         }
     }
     public function update($request, $ticket){
-        $originalStatus = $ticket->status;
-        $originalAgent = $ticket->assigned_to;  
-        $ticket->update($request->only('title', 'message', 'status', 'priority', 'assigned_to'));
+        DB::transaction(function () use ($request, $ticket) {
+            $originalStatus = $ticket->status;
+            $originalAgent = $ticket->assigned_to;  
 
-        if ($originalStatus !== $ticket->status) {
-            $user = User::findOrFail($ticket->user_id);
-            $user->notify(new TicketStatusUpdatedNotification($ticket));
-        }
+            $ticket->update($request->only('title', 'message', 'status', 'priority', 'assigned_to'));
 
-        $ticket->categories()->sync($request->input('categories'));
-        $ticket->labels()->sync($request->input('labels'));
-
-        if($originalAgent !== $ticket->assigned_to){
-            $user = User::findOrFail($ticket->assigned_to);
-            $user->notify(new TicketAssignedNotification($ticket));
-        }
-
-        if (!is_null($request->input('attachments')[0])) {
-            foreach ($request->input('attachments') as $file) {
-                $ticket->addMediaFromDisk($file, 'public')->toMediaCollection('tickets_attachments');
+            if ($originalStatus !== $ticket->status) {
+                $user = User::findOrFail($ticket->user_id);
+                $user->notify(new TicketStatusUpdatedNotification($ticket));
             }
-        }
+
+            $ticket->categories()->sync($request->input('categories'));
+            $ticket->labels()->sync($request->input('labels'));
+
+            if($originalAgent !== $ticket->assigned_to){
+                $agent = User::findOrFail($ticket->assigned_to);
+
+                $unresolvedTickets = Ticket::where('assigned_to', $ticket->assigned_to)
+                ->where('status', '!=', 'resolved')
+                ->count();
+
+                if($unresolvedTickets >= 5){
+                    $agent->status = 'busy';
+                    $agent->save();
+                }
+                $agent->notify(new TicketAssignedNotification($ticket));
+            }
+
+            if (!is_null($request->input('attachments')[0])) {
+                foreach ($request->input('attachments') as $file) {
+                    $ticket->addMediaFromDisk($file, 'public')->toMediaCollection('tickets_attachments');
+                }
+            }
+
+        });
     }
     public function delete($id){
         $ticket = Ticket::findOrFail($id);

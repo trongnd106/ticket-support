@@ -56,7 +56,7 @@ class TicketController extends Controller
 
     public function edit($id)
     {
-        $users = User::role('agent')->orderBy('name')->pluck('name','id');
+        $users = User::role('agent')->where('status','free')->orderBy('name')->pluck('name','id');
         $ticket = Ticket::findOrFail($id);
         $labels = Label::pluck('name', 'id');
         $categories = Category::pluck('name', 'id');
