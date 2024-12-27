@@ -1,5 +1,6 @@
 version: "3"
 services:
+    # PHP Service
     app:
         build:
             context: .
@@ -15,10 +16,10 @@ services:
         volumes:
             - ./:/var/www
             - ./php/php.ini:/usr/local/etc/php/conf.d/local.ini
-            - ./storage/database:/var/www/storage/database
         networks:
             - app-network
 
+    # Nginx Service
     webserver:
         image: nginx
         container_name: project_webserver
@@ -30,13 +31,11 @@ services:
         volumes:
             - ./:/var/www
             - ./nginx/conf.d/:/etc/nginx/conf.d/
+            - ./database:/var/www/database
         networks:
             - app-network
 
+# Docker Networks
 networks:
     app-network:
         driver: bridge
-
-volumes:
-    dbdata:
-        driver: local
