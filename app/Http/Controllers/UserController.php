@@ -18,6 +18,10 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $users = User::role('user');
+
+        if ($request->has('search') && !empty($request->search)) {
+            $users->where('email', 'like', '%' . $request->search . '%');
+        }
     
         $users = $users->paginate(10);
     
